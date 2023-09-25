@@ -15,15 +15,22 @@ const Statistics = ({good, neutral, bad}) => {
   let avg = total/count;
   let positive = (good/count)*100
 
+  if (count > 0) {
+    return(
+      <div>
+        <h1>statistics</h1>
+        <p>Good: {good}</p>
+        <p>Neutral: {neutral}</p>
+        <p>Bad: {bad}</p>
+        <p>all: {count}</p>
+        <p>average: {avg}</p>
+        <p>positive: {positive}%</p>
+      </div>
+    )
+  }
   return(
     <div>
-      <h1>statistics</h1>
-      <p>Good: {good}</p>
-      <p>Neutral: {neutral}</p>
-      <p>Bad: {bad}</p>
-      <p>all: {count}</p>
-      <p>average: {avg}</p>
-      <p>positive: {positive}%</p>
+      <p>No feedback given</p>
     </div>
   )
 }
