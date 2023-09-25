@@ -1,3 +1,4 @@
+```mermaid
 sequenceDiagram
 participant browser
 participant server
@@ -10,3 +11,4 @@ participant server
     Note left of server: Server creates new note serverside
     server-->>browser: 201 Created { message: 'note created' }
     deactivate server
+```
