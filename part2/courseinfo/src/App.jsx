@@ -1,5 +1,6 @@
 const Header = ({ course }) => <h1>{course}</h1>
 
+// Adding comment to cover part 2.2
 const Total = ({ sum }) => <p>Number of exercises {sum}</p>
 
 const Part = ({ part }) => 
