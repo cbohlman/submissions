@@ -9,7 +9,9 @@ const Part = ({ part }) =>
   </p>
 
 const Course = ({ course }) => {
-  const sum = course.parts.map(part => part.exercises).reduce((prev, next) => prev + next)
+  // const sum = course.parts.map(part => part.exercises).reduce((prev, next) => prev + next)
+  const sum = course.parts.reduce((p,n) => p + n.exercises, 0);
+  
   return (
   <>
     <Header course={course.name} />
