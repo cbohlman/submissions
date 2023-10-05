@@ -44,6 +44,17 @@ const App = () => {
     setFilterValue(event.target.value)
   }
 
+  const handleDelete = (id) => {
+    personService
+    .deletePerson(id)
+    .then(res => {
+      setPersons(persons.filter(p => p.id !== id))
+    })
+    .catch(err => {
+      console.error(err)
+    })
+  }
+
   const peopleToShow = filterValue === '' ? persons : persons.filter(person => person.name.toLowerCase().includes(filterValue.toLowerCase()))
 
   return (
@@ -59,7 +70,7 @@ const App = () => {
         numberChangeHandler={handleNumberChange}>
       </PersonForm>
       <h3>Numbers</h3>
-      <Persons peopleToShow={peopleToShow} />
+      <Persons peopleToShow={peopleToShow} deleteHandler={handleDelete}/>
     </div>
   )
 }
