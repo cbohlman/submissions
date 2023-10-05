@@ -19,7 +19,15 @@ const App = () => {
   const addName = (event) => {
     event.preventDefault();
     if (persons.filter(person => person.name === newName).length > 0) {
-      alert(`${newName} is already added to phonebook`);
+      if(window.confirm(`${newName} is already in the phonebook, would you like to replace the number?`)) {
+        const oldPerson = persons.find(p => p.name === newName);
+        const newPerson = { ...oldPerson, number: newNumber }
+        personService
+        .update(oldPerson.id, newPerson)
+        .then(res => {
+          setPersons(persons.map(p => p.id !== oldPerson.id ? p : res))
+        })
+      }
     }
     else {
       personService
@@ -45,14 +53,16 @@ const App = () => {
   }
 
   const handleDelete = (id) => {
-    personService
-    .deletePerson(id)
-    .then(res => {
-      setPersons(persons.filter(p => p.id !== id))
-    })
-    .catch(err => {
-      console.error(err)
-    })
+    if (window.confirm('Do you really want to delete?')) {
+      personService
+      .deletePerson(id)
+      .then(res => {
+        setPersons(persons.filter(p => p.id !== id))
+      })
+      .catch(err => {
+        console.error(err)
+      })
+    }
   }
 
   const peopleToShow = filterValue === '' ? persons : persons.filter(person => person.name.toLowerCase().includes(filterValue.toLowerCase()))
