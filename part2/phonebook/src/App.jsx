@@ -76,7 +76,9 @@ const App = () => {
         setPersons(persons.filter(p => p.id !== id))
       })
       .catch(err => {
-        setNotifMessage(`Error deleting entry`)
+        console.error(err);
+        const per = persons.find(p => p.id === id)
+        setNotifMessage(`Error deleting ${per.name}, likely already deleted`)
         setNotifType('error')
         setTimeout(() => {
           setNotifMessage(null)
