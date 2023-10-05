@@ -3,12 +3,16 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import personService from './services/persons'
+import Notification from './components/Notification'
+import './index.css'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterValue, setFilterValue] = useState('')
+  const [notifMessage, setNotifMessage] = useState('')
+  const [notifType, setNotifType] = useState('')
 
   useEffect(() => {
     personService
@@ -26,6 +30,12 @@ const App = () => {
         .update(oldPerson.id, newPerson)
         .then(res => {
           setPersons(persons.map(p => p.id !== oldPerson.id ? p : res))
+          setNotifMessage(`Successfully updated number for ${newPerson.name}`)
+          setNotifType('success')
+          setTimeout(() => {
+            setNotifMessage(null)
+            setNotifType(null)
+          }, 5000)
         })
       }
     }
@@ -34,6 +44,12 @@ const App = () => {
       .create({ name: newName, number: newNumber, id: persons.length + 1 })
       .then(res => {
         setPersons(persons.concat(res));
+        setNotifMessage(`Successfully added ${newName}`)
+        setNotifType('success')
+        setTimeout(() => {
+          setNotifMessage(null)
+          setNotifType(null)
+        }, 5000)
         setNewName('')
         setNewNumber('')
       })
@@ -60,7 +76,12 @@ const App = () => {
         setPersons(persons.filter(p => p.id !== id))
       })
       .catch(err => {
-        console.error(err)
+        setNotifMessage(`Error deleting entry`)
+        setNotifType('error')
+        setTimeout(() => {
+          setNotifMessage(null)
+          setNotifType(null)
+        }, 5000)
       })
     }
   }
@@ -70,6 +91,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notifMessage} type={notifType} />
       <Filter filterChangeHandler={handleFilterChange} />
       <h3>Add a New Value</h3>
       <PersonForm 
