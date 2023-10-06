@@ -24,14 +24,16 @@ const App = () => {
     setFilteredRes(filteredResults)
   }
 
-
+  const handleShow = country => {
+    setFilteredRes([country])
+  }
 
   return (
     <div>
       <form>
         find countries <input value={searchValue} onChange={handleInputChange}></input>
       </form>
-      <Display countries={countries} filteredCountries={filteredRes} />
+      <Display countries={countries} filteredCountries={filteredRes} handleShow={handleShow}/>
     </div>
   )
 }
