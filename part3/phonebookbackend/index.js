@@ -61,6 +61,16 @@ app.post("/api/persons", (request, response) => {
   if (!body.name) {
     return response.status(400).json({ error: "missing name" });
   }
+  if (!body.number) {
+    return response.status(400).json({ error: "missing number" });
+  }
+  if (
+    persons.filter(
+      (person) => person.name.toLowerCase() === body.name.toLowerCase()
+    ).length > 0
+  ) {
+    return response.status(400).json({ error: "Entry already exists" });
+  }
 
   const person = {
     name: body.name,
