@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 
+const MAX_ID = 1000000000000000;
+
 app.use(express.json());
 
 let persons = [
@@ -26,6 +28,10 @@ let persons = [
   },
 ];
 
+const generateId = () => {
+  return Math.floor(Math.random() * MAX_ID);
+};
+
 app.get("/", (request, response) => {
   const content = `
         <p>Phonebook has info for ${persons.length} people</p>
@@ -47,6 +53,23 @@ app.get("/api/persons/:id", (request, response) => {
   } else {
     response.status(404).end();
   }
+});
+
+app.post("/api/persons", (request, response) => {
+  console.log(generateId());
+  const body = request.body;
+  if (!body.name) {
+    return response.status(400).json({ error: "missing name" });
+  }
+
+  const person = {
+    name: body.name,
+    number: body.number,
+    id: generateId(),
+  };
+
+  persons = persons.concat(person);
+  response.json(person);
 });
 
 app.delete("/api/persons/:id", (request, response) => {
