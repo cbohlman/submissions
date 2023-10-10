@@ -53,6 +53,15 @@ const App = () => {
         setNewName('')
         setNewNumber('')
       })
+      .catch(error => {
+        console.log(error.response.data.error);
+        setNotifMessage(error.response.data.error)
+        setNotifType('error')
+        setTimeout(() => {
+          setNotifMessage(null)
+          setNotifType(null)
+        }, 5000)
+      })
     }
   }
 
