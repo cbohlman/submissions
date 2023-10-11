@@ -97,6 +97,25 @@ describe("POST /blogs", () => {
   });
 });
 
+describe("PUT /blogs", () => {
+  test("Succeeds with valid data", async () => {
+    const blogsAtStart = await helper.blogsInDb();
+    const blogToUpdate = blogsAtStart[0];
+    blogToUpdate.title = "TestUpdatedTitle";
+
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(blogToUpdate)
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    const blogsAtEnd = await helper.blogsInDb();
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length); // make sure this doesn't change
+    const contents = blogsAtEnd.map((b) => b.title);
+    expect(contents).toContain(blogToUpdate.title);
+  });
+});
+
 describe("DELETE /blogs", () => {
   test("Succeeds with 204 if valid id", async () => {
     const blogsAtStart = await helper.blogsInDb();
