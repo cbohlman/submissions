@@ -72,6 +72,29 @@ describe("POST /blogs", () => {
     const likes = blogsAtEnd[0].likes;
     expect(likes).toEqual(0);
   });
+  test("Title is a required property", async () => {
+    const newBlog = {
+      author: "test author",
+      url: "test.com",
+    };
+    await api
+      .post("/api/blogs")
+      .send(newBlog)
+      .expect(400)
+      .expect("Content-Type", /application\/json/);
+  });
+
+  test("url is a required property", async () => {
+    const newBlog = {
+      author: "test author",
+      title: "test title",
+    };
+    await api
+      .post("/api/blogs")
+      .send(newBlog)
+      .expect(400)
+      .expect("Content-Type", /application\/json/);
+  });
 });
 
 afterAll(async () => {
