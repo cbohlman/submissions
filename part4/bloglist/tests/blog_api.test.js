@@ -4,6 +4,7 @@ const app = require("../app");
 const helper = require("./test_helper");
 const api = supertest(app);
 const Blog = require("../models/blog");
+const blog = require("../models/blog");
 
 beforeEach(async () => {
   await Blog.deleteMany({});
@@ -51,6 +52,25 @@ describe("POST /blogs", () => {
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
     const contents = blogsAtEnd.map((b) => b.title);
     expect(contents).toContain(newBlog.title);
+  });
+
+  test("If 'likes' property is missing, it's defaulted to 0", async () => {
+    await Blog.deleteMany({}); // clear db
+    const newBlog = {
+      title: "test title",
+      author: "test author",
+      url: "test.com",
+    };
+    await api
+      .post("/api/blogs")
+      .send(newBlog)
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
+
+    const blogsAtEnd = await helper.blogsInDb();
+    expect(blogsAtEnd).toHaveLength(1);
+    const likes = blogsAtEnd[0].likes;
+    expect(likes).toEqual(0);
   });
 });
 
