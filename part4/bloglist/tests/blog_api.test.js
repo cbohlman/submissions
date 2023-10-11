@@ -25,6 +25,11 @@ describe("GET Blogs", () => {
     const response = await api.get("/api/blogs");
     expect(response.body).toHaveLength(helper.initialBlogs.length);
   });
+
+  test("Expect 'id' parameter to be defined", async () => {
+    const response = await api.get("/api/blogs");
+    expect(response.body[0].id).toBeDefined();
+  });
 });
 
 afterAll(async () => {
