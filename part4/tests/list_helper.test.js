@@ -116,3 +116,12 @@ describe("Most Blogs", () => {
     expect(result).toEqual(sampleResponse);
   });
 });
+
+describe("Most Likes", () => {
+  const sampleResponse = {
+    author: "Edsger W. Dijkstra",
+    likes: 17,
+  };
+  const result = listHelper.mostLikes(mockBlogsData);
+  expect(result).toEqual(sampleResponse);
+});

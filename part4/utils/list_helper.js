@@ -16,12 +16,26 @@ const favoriteBlog = (blogs) => {
 
 const mostBlogs = (blogs) => {
   const countedBlogs = _.countBy(blogs, "author");
-  console.log(countedBlogs);
   const author = _.maxBy(_.keys(countedBlogs), (o) => countedBlogs[o]);
-  console.log(_.keys(countedBlogs));
   return {
     author: author,
     blogs: countedBlogs[author],
+  };
+};
+
+const mostLikes = (blogs) => {
+  const countTable = {};
+  blogs.forEach((blog) => {
+    if (countTable[blog.author]) {
+      countTable[blog.author] += blog.likes;
+    } else {
+      countTable[blog.author] = blog.likes;
+    }
+  });
+  const author = _.maxBy(_.keys(countTable), (o) => countTable[o]);
+  return {
+    author: author,
+    likes: countTable[author],
   };
 };
 
@@ -30,4 +44,5 @@ module.exports = {
   totalLikes,
   favoriteBlog,
   mostBlogs,
+  mostLikes,
 };
