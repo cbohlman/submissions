@@ -1,3 +1,4 @@
+const { sample } = require("lodash");
 const listHelper = require("../utils/list_helper");
 
 const mockBlogsData = [
@@ -103,5 +104,15 @@ describe("favorite blog", () => {
   test("check favorite blog", () => {
     const result = listHelper.favoriteBlog(mockBlogsData);
     expect(result).toEqual(result);
+  });
+});
+describe("Most Blogs", () => {
+  const sampleResponse = {
+    author: "Robert C. Martin",
+    blogs: 3,
+  };
+  test("check full blogs list", () => {
+    const result = listHelper.mostBlogs(mockBlogsData);
+    expect(result).toEqual(sampleResponse);
   });
 });
