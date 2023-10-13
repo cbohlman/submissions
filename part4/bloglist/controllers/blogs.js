@@ -35,18 +35,22 @@ blogsRouter.put("/:id", async (request, response) => {
 });
 
 blogsRouter.delete("/:id", userExtractor, async (request, response) => {
-  const user = request.user;
-  const blogToDelete = await Blog.findById(request.params.id);
+  try {
+    const user = request.user;
+    const blogToDelete = await Blog.findById(request.params.id);
 
-  if (!blogToDelete) {
-    return response.status(404).end();
-  }
+    if (!blogToDelete) {
+      return response.status(404).end();
+    }
 
-  if (blogToDelete.user.toString() !== user.id) {
-    return response.status(401).json({ error: "unauthorized" });
+    if (blogToDelete.user.toString() !== user.id) {
+      return response.status(401).json({ error: "unauthorized" });
+    }
+    await Blog.findByIdAndRemove(request.params.id);
+    response.status(204).end();
+  } catch (exception) {
+    console.error(exception);
   }
-  await Blog.findByIdAndRemove(request.params.id);
-  response.status(204).end();
 });
 
 module.exports = blogsRouter;

@@ -1,10 +1,12 @@
 const mongoose = require("mongoose");
 const supertest = require("supertest");
+const bcrypt = require("bcrypt");
 const app = require("../app");
 const helper = require("./test_helper");
 const api = supertest(app);
 const Blog = require("../models/blog");
 const blog = require("../models/blog");
+const User = require("../models/user");
 
 beforeEach(async () => {
   await Blog.deleteMany({});
@@ -34,6 +36,19 @@ describe("GET /blogs", () => {
 });
 
 describe("POST /blogs", () => {
+  let token;
+  beforeAll(async () => {
+    const newUser = {
+      username: "root",
+      password: "sekret",
+    };
+    await User.deleteMany({});
+    const passwordHash = await bcrypt.hash(newUser.password, 10);
+    const user = new User({ username: newUser.username, passwordHash });
+    await user.save();
+    const loginResponse = await api.post("/api/login").send(newUser);
+    token = loginResponse.body.token;
+  });
   test("Valid blog can be added", async () => {
     const newBlog = {
       title: "test title",
@@ -44,6 +59,7 @@ describe("POST /blogs", () => {
 
     await api
       .post("/api/blogs")
+      .set({ Authorization: `Bearer ${token}` })
       .send(newBlog)
       .expect(201)
       .expect("Content-Type", /application\/json/);
@@ -63,6 +79,7 @@ describe("POST /blogs", () => {
     };
     await api
       .post("/api/blogs")
+      .set({ Authorization: `Bearer ${token}` })
       .send(newBlog)
       .expect(201)
       .expect("Content-Type", /application\/json/);
@@ -79,6 +96,7 @@ describe("POST /blogs", () => {
     };
     await api
       .post("/api/blogs")
+      .set({ Authorization: `Bearer ${token}` })
       .send(newBlog)
       .expect(400)
       .expect("Content-Type", /application\/json/);
@@ -91,6 +109,7 @@ describe("POST /blogs", () => {
     };
     await api
       .post("/api/blogs")
+      .set({ Authorization: `Bearer ${token}` })
       .send(newBlog)
       .expect(400)
       .expect("Content-Type", /application\/json/);
@@ -117,14 +136,41 @@ describe("PUT /blogs", () => {
 });
 
 describe("DELETE /blogs", () => {
+  beforeEach(async () => {
+    const newUser = {
+      username: "root",
+      password: "sekret",
+    };
+    await User.deleteMany({});
+    const passwordHash = await bcrypt.hash(newUser.password, 10);
+    const user = new User({ username: newUser.username, passwordHash });
+    await user.save();
+    const loginResponse = await api.post("/api/login").send(newUser);
+    token = loginResponse.body.token;
+    await Blog.deleteMany({});
+    const newBlog = {
+      title: "test title",
+      author: "test author",
+      url: "test.com",
+      likes: 0,
+    };
+    await api
+      .post("/api/blogs/")
+      .set({ Authorization: `Bearer ${token}` })
+      .send(newBlog)
+      .expect(201);
+  });
   test("Succeeds with 204 if valid id", async () => {
     const blogsAtStart = await helper.blogsInDb();
     const blogToDelete = blogsAtStart[0];
 
-    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .set({ Authorization: `Bearer ${token}` })
+      .expect(204);
     const blogsAtEnd = await helper.blogsInDb();
 
-    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1);
+    expect(blogsAtEnd).toHaveLength(0);
     const contents = blogsAtEnd.map((b) => b.title);
     expect(contents).not.toContain(blogToDelete.title);
   });
