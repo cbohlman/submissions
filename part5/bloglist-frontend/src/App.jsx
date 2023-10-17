@@ -5,6 +5,7 @@ import BlogForm from './components/BlogForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import BlogList from './components/BlogList'
+import Notification from './components/Notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -14,6 +15,8 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+  const [notificationMessage, setNotificationMessage] = useState('');
+  const [notificationType, setNotificationType] = useState('');
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -30,6 +33,15 @@ const App = () => {
     }
   }, [])
 
+  const showNotification = (message, type, time) => {
+    setNotificationMessage(message)
+    setNotificationType(type)
+    setTimeout(() => {
+      setNotificationMessage('')
+      setNotificationType('')
+    }, time)
+  }
+
   const handleLogin = async (event) => {
     event.preventDefault()
 
@@ -41,7 +53,8 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      console.error(exception)
+      console.error(exception.response.data.error)
+      showNotification(exception.response.data.error, 'error', 5000)
     }
   } 
   
@@ -60,6 +73,7 @@ const App = () => {
 
     const returnedBlog = await blogService.create(blogObject);
     setBlogs(blogs.concat(returnedBlog))
+    showNotification(`Added ${title} by ${author}`, 'success', 5000)
     setTitle('');
     setAuthor('');
     setUrl('');
@@ -67,6 +81,7 @@ const App = () => {
 
   return (
     <div>
+      <Notification message={notificationMessage} type={notificationType} />
       {!user && <LoginForm 
         handleLogin={handleLogin} 
         username={username}
