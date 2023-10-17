@@ -30,7 +30,12 @@ const App = () => {
     } catch (exception) {
       console.error(exception)
     }
-  }  
+  } 
+  
+  const handleLogout = () => {
+    setUser('')
+    window.localStorage.removeItem('loggedBlogAppUser')
+  }
 
   return (
     <div>
@@ -41,7 +46,7 @@ const App = () => {
         password={password}
         setPassword={setPassword}
         />}
-      <BlogList blogs={blogs} user={user} />
+      <BlogList blogs={blogs} user={user} handleLogout={handleLogout} />
     </div>
   )
 }
