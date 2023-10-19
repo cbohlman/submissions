@@ -66,34 +66,15 @@ const App = () => {
     window.localStorage.removeItem('loggedBlogAppUser')
   }
 
-  const addBlog = async (event) => {
-    event.preventDefault();
-    const blogObject = {
-      title: title, 
-      author: author,
-      url: url
-    }
-
+  const addBlog = async (blogObject) => {
     const returnedBlog = await blogService.create(blogObject);
     setBlogs(blogs.concat(returnedBlog))
     showNotification(`Added ${title} by ${author}`, 'success', 5000)
-    setTitle('');
-    setAuthor('');
-    setUrl('');
   }
 
   const blogForm = () => (
     <Togglable buttonLabel='New Blog' ref={blogFormRef}>
-      <BlogForm
-        user={user} 
-        addBlog={addBlog}
-        title={title}
-        setTitle={setTitle}
-        author={author}
-        setAuthor={setAuthor}
-        url={url}
-        setUrl={setUrl}
-      />
+      <BlogForm createBlog={addBlog}/>
     </Togglable>
   )
 
