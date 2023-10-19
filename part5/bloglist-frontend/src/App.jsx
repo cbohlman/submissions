@@ -21,7 +21,7 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+      setBlogs(blogs.sort((a,b) => b.likes - a.likes))
     )  
   }, [])
 
@@ -66,8 +66,15 @@ const App = () => {
     window.localStorage.removeItem('loggedBlogAppUser')
   }
 
+  const handleLike = async (blogObject) => {
+    const returnedBlog = await blogService.edit(blogObject)
+    const updatedBlogs = blogs.map(blog => blog.id !== returnedBlog.id ? blog : returnedBlog)
+    setBlogs(updatedBlogs.sort((a,b) => b.likes - a.likes));
+  }
+
   const addBlog = async (blogObject) => {
     const returnedBlog = await blogService.create(blogObject);
+    console.log(JSON.stringify(returnedBlog))
     setBlogs(blogs.concat(returnedBlog))
     showNotification(`Added ${title} by ${author}`, 'success', 5000)
   }
@@ -100,7 +107,8 @@ const App = () => {
       <BlogList
         blogs={blogs} 
         user={user} 
-        handleLogout={handleLogout}/>
+        handleLogout={handleLogout}
+        likeHandler={handleLike}/>
     </div>
   )
 }
