@@ -1,43 +1,45 @@
-import { useState } from "react"
+import { useState } from "react";
+import PropTypes from "prop-types";
 
 const Blog = ({ blog, likeHandler, deleteHandler, user }) => {
-  const [visible, setVisibile] = useState(false)
+  const [visible, setVisibile] = useState(false);
 
-  const hideWhenVisible = { display: visible ? 'none' : ''}
-  const showWhenVisible = { display: visible ? '' : 'none'}
+  const hideWhenVisible = { display: visible ? "none" : "" };
+  const showWhenVisible = { display: visible ? "" : "none" };
 
   const toggleVisibility = () => {
-    setVisibile(!visible)
-  }
+    setVisibile(!visible);
+  };
 
-  const showDeleteButton = () => user.id === blog.user.id
+  const showDeleteButton = () => user.id === blog.user.id;
   const blogStyle = {
     paddingTop: 10,
-    paddingLeft: 2, 
-    border: 'solid',
+    paddingLeft: 2,
+    border: "solid",
     borderWidth: 1,
-    marginBottom: 5
-  }
+    marginBottom: 5,
+  };
 
   const handleLike = () => {
-    const newLikes = blog.likes + 1
-    const updatedBlog = {...blog, likes: newLikes}
-    delete updatedBlog.user
-    likeHandler(updatedBlog)
-  }
+    const newLikes = blog.likes + 1;
+    const updatedBlog = { ...blog, likes: newLikes };
+    delete updatedBlog.user;
+    likeHandler(updatedBlog);
+  };
 
   const handleDelete = () => {
     if (window.confirm(`Are you sure you want to delete ${blog.title}?`)) {
       deleteHandler(blog.id);
     }
-  }
+  };
 
   return (
     <div>
       <div style={hideWhenVisible}>
         <div style={blogStyle}>
-          {blog.title} {blog.author} <button onClick={toggleVisibility}>View</button>
-        </div>  
+          {blog.title} {blog.author}{" "}
+          <button onClick={toggleVisibility}>View</button>
+        </div>
       </div>
       <div style={showWhenVisible}>
         <div style={blogStyle}>
@@ -54,7 +56,14 @@ const Blog = ({ blog, likeHandler, deleteHandler, user }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Blog
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  likeHandler: PropTypes.func.isRequired,
+  deleteHandler: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+};
+
+export default Blog;
