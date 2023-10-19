@@ -51,7 +51,7 @@ blogsRouter.delete("/:id", userExtractor, async (request, response) => {
     await Blog.findByIdAndRemove(request.params.id);
     response.status(204).end();
   } catch (exception) {
-    console.error(exception);
+    return response.status(400).json({ error: exception.message });
   }
 });
 

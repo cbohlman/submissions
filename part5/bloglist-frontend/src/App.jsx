@@ -72,9 +72,12 @@ const App = () => {
     setBlogs(updatedBlogs.sort((a,b) => b.likes - a.likes));
   }
 
+  const handleDelete = async (id) => {
+    const result = await blogService.deleteBlog(id)
+    setBlogs(blogs.filter(blog => blog.id !== id))
+  }
   const addBlog = async (blogObject) => {
     const returnedBlog = await blogService.create(blogObject);
-    console.log(JSON.stringify(returnedBlog))
     setBlogs(blogs.concat(returnedBlog))
     showNotification(`Added ${title} by ${author}`, 'success', 5000)
   }
@@ -108,7 +111,8 @@ const App = () => {
         blogs={blogs} 
         user={user} 
         handleLogout={handleLogout}
-        likeHandler={handleLike}/>
+        likeHandler={handleLike}
+        deleteHandler={handleDelete}/>
     </div>
   )
 }

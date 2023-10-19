@@ -29,4 +29,12 @@ const edit = (blogToUpdate) => {
   return request.then((response) => response.data);
 };
 
-export default { getAll, setToken, create, edit };
+const deleteBlog = (id) => {
+  const config = {
+    headers: { Authorization: token },
+  };
+  const request = axios.delete(`${baseUrl}/${id}`, config);
+  return request.then((response) => response.data);
+};
+
+export default { getAll, setToken, create, edit, deleteBlog };
