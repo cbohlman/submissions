@@ -6,7 +6,8 @@ import Blog from "../Blog";
 
 describe("<Blog />", () => {
   let container;
-
+  const likeHandler = jest.fn();
+  const deleteHandler = jest.fn();
   const user = {
     id: "123456",
     name: "Test Name",
@@ -22,7 +23,14 @@ describe("<Blog />", () => {
   };
 
   beforeEach(() => {
-    container = render(<Blog blog={blog} user={user} />).container;
+    container = render(
+      <Blog
+        blog={blog}
+        user={user}
+        likeHandler={likeHandler}
+        deleteHandler={deleteHandler}
+      />
+    ).container;
   });
 
   test("blog renders title and author by default", () => {
@@ -39,5 +47,16 @@ describe("<Blog />", () => {
 
     const div = container.querySelector(".fullBlogView");
     expect(div).not.toHaveStyle("display: none");
+  });
+
+  test("like button clicked twice calls handler twice", async () => {
+    const user = userEvent.setup();
+    const button = screen.getByText("View");
+    await user.click(button);
+
+    const likeButton = container.querySelector("#likeButton");
+    await user.click(likeButton);
+    await user.click(likeButton);
+    expect(likeHandler.mock.calls).toHaveLength(2);
   });
 });

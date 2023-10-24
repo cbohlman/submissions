@@ -49,7 +49,10 @@ const Blog = ({ blog, likeHandler, deleteHandler, user }) => {
           </p>
           <p className="urlDisplay">{blog.url}</p>
           <p className="likesDisplay">
-            {blog.likes} <button onClick={handleLike}>Like</button>
+            {blog.likes}{" "}
+            <button id="likeButton" onClick={handleLike}>
+              Like
+            </button>
           </p>
           <p>{blog.user.name}</p>
           {showDeleteButton() && <button onClick={handleDelete}>Delete</button>}
