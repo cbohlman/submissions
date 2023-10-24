@@ -35,20 +35,20 @@ const Blog = ({ blog, likeHandler, deleteHandler, user }) => {
 
   return (
     <div>
-      <div style={hideWhenVisible}>
+      <div className="compactBlogView" style={hideWhenVisible}>
         <div style={blogStyle}>
           {blog.title} {blog.author}{" "}
           <button onClick={toggleVisibility}>View</button>
         </div>
       </div>
-      <div style={showWhenVisible}>
+      <div className="fullBlogView" style={showWhenVisible}>
         <div style={blogStyle}>
           <p>
             {blog.title} - {blog.author}
             <button onClick={toggleVisibility}>Hide</button>
           </p>
-          <p>{blog.url}</p>
-          <p>
+          <p className="urlDisplay">{blog.url}</p>
+          <p className="likesDisplay">
             {blog.likes} <button onClick={handleLike}>Like</button>
           </p>
           <p>{blog.user.name}</p>
