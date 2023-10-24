@@ -31,4 +31,13 @@ describe("<Blog />", () => {
     const fullElement = container.querySelector(".fullBlogView");
     expect(fullElement).toHaveStyle("display: none");
   });
+
+  test("blog shows url and likes when button is clicked", async () => {
+    const user = userEvent.setup();
+    const button = screen.getByText("View");
+    await user.click(button);
+
+    const div = container.querySelector(".fullBlogView");
+    expect(div).not.toHaveStyle("display: none");
+  });
 });
