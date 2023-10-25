@@ -40,7 +40,7 @@ describe("Blog app", function () {
     beforeEach(function () {
       cy.login({ username: "testuser", password: "secret" });
     });
-    it.only("A blog can be created", function () {
+    it("A blog can be created", function () {
       cy.contains("New Blog").click();
       cy.get("#titleInput").type("Test Title");
       cy.get("#authorInput").type("Test Author");
@@ -50,6 +50,26 @@ describe("Blog app", function () {
       cy.get("html")
         .should("contain", "Test Title")
         .and("contain", "Test Author");
+    });
+    describe("and a blog exists", function () {
+      beforeEach(function () {
+        cy.createBlog({
+          title: "Test Title",
+          author: "Test Author",
+          url: "Test URL",
+        });
+      });
+
+      it("a blog can be liked", function () {
+        cy.contains("View").click();
+        cy.get("#likeButton").click();
+        cy.get("#likeButton").parent().contains("1");
+      });
+
+      it.only("delete button is visible for logged in user", function () {
+        cy.contains("View").click();
+        cy.contains("Delete");
+      });
     });
   });
 });
