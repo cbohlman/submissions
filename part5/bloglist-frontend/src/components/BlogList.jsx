@@ -10,7 +10,7 @@ const BlogList = ({
 }) => {
   if (user) {
     return (
-      <>
+      <div className="blogListContainer">
         {blogs.map((blog) => (
           <Blog
             key={blog.id}
@@ -20,7 +20,7 @@ const BlogList = ({
             deleteHandler={deleteHandler}
           />
         ))}
-      </>
+      </div>
     );
   }
   return null;

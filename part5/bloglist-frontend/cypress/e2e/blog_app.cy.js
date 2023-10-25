@@ -71,7 +71,7 @@ describe("Blog app", function () {
         cy.contains("Delete");
       });
 
-      it.only("only the creator can see the delete button", function () {
+      it("only the creator can see the delete button", function () {
         cy.contains("Log Out").click();
         const user = {
           name: "test2",
@@ -83,6 +83,17 @@ describe("Blog app", function () {
         cy.contains("test2 logged in");
         cy.contains("View").click();
         cy.get("html").should("not.contain", "Delete");
+      });
+      it("blogs should be sorted in order of likes", function () {
+        cy.createBlog({
+          title: "most likes",
+          author: "auth1",
+          url: "url1",
+        });
+        cy.get(".blogListContainer").eq(0).should("contain", "Test Title");
+        cy.contains("most likes").parent().contains("View").click();
+        cy.get(".fullBlogView:visible").contains("Like").click();
+        cy.get(".blogListContainer").eq(0).should("contain", "most likes");
       });
     });
   });
