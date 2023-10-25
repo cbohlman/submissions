@@ -66,9 +66,23 @@ describe("Blog app", function () {
         cy.get("#likeButton").parent().contains("1");
       });
 
-      it.only("delete button is visible for logged in user", function () {
+      it("delete button is visible for logged in user", function () {
         cy.contains("View").click();
         cy.contains("Delete");
+      });
+
+      it.only("only the creator can see the delete button", function () {
+        cy.contains("Log Out").click();
+        const user = {
+          name: "test2",
+          username: "testuser2",
+          password: "secret",
+        };
+        cy.request("POST", `${Cypress.env("BACKEND")}/users`, user);
+        cy.login({ username: "testuser2", password: "secret" });
+        cy.contains("test2 logged in");
+        cy.contains("View").click();
+        cy.get("html").should("not.contain", "Delete");
       });
     });
   });
