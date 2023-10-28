@@ -37,6 +37,7 @@ const Blog = ({ blog, likeHandler, deleteHandler, user }) => {
     <div>
       <div className="compactBlogView" style={hideWhenVisible}>
         <div style={blogStyle}>
+          {/* {blog.title} {blog.author} {" "} */}
           {blog.title} {blog.author}{" "}
           <button onClick={toggleVisibility}>View</button>
         </div>
