@@ -41,7 +41,7 @@ const reducer = (state = initialState, action) => {
   return sortByVotes([...state]);
 };
 
-export const addVote = (id) => {
+export const createVote = (id) => {
   return {
     type: "VOTE",
     payload: { id },
