@@ -12,7 +12,6 @@ const AnecdoteList = () => {
       a.content.toLowerCase().includes(state.filter.toLowerCase())
     )
   );
-
   const sortByVotes = (state) => {
     return state.sort((a, b) => b.votes - a.votes);
   };
