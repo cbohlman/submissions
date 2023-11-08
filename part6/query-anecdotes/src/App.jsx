@@ -12,20 +12,20 @@ const App = () => {
 
   const updateAnecdoteMutation = useMutation({
     mutationFn: updateAnecdote,
-    onSuccess: () => {
+    onSuccess: (updatedAnecdote) => {
       queryClient.invalidateQueries({ queryKey: ["anecdotes"] });
+      dispatch({
+        type: "SET_MESSAGE",
+        payload: `Voted for ${updatedAnecdote.content}`,
+      });
+      setTimeout(() => {
+        dispatch({ type: "CLEAR_MESSAGE" });
+      }, 5000);
     },
   });
 
   const handleVote = (anecdote) => {
     updateAnecdoteMutation.mutate({ ...anecdote, votes: anecdote.votes + 1 });
-    dispatch({
-      type: "SET_MESSAGE",
-      payload: `Voted for ${anecdote.content}`,
-    });
-    setTimeout(() => {
-      dispatch({ type: "CLEAR_MESSAGE" });
-    }, 5000);
   };
 
   const { isPending, isError, data, error } = useQuery({
