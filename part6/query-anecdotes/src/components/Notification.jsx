@@ -3,7 +3,6 @@ import MessageContext from "../MessageContext";
 
 const Notification = () => {
   const [message, messageDispatch] = useContext(MessageContext);
-  console.log(message);
   const visibleStyle = {
     border: "solid",
     padding: 10,
