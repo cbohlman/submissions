@@ -76,12 +76,9 @@ const Footer = () => (
 );
 
 const CreateNew = (props) => {
-  const content = useField("");
-  const author = useField("");
-  const info = useField("");
-  // const [content, setContent] = useState("");
-  // const [author, setAuthor] = useState("");
-  // const [info, setInfo] = useState("");
+  const { reset: resetContent, ...content } = useField("");
+  const { reset: resetAuthor, ...author } = useField("");
+  const { reset: resetInfo, ...info } = useField("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -94,9 +91,9 @@ const CreateNew = (props) => {
   };
 
   const handleReset = (e) => {
-    content.reset();
-    author.reset();
-    info.reset();
+    resetAuthor();
+    resetContent();
+    resetInfo();
   };
 
   return (
